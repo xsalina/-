@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>乌拉拉</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<style>
+    .container {
+        width: 400px;
+        height: 400px;
+        background-color: black;
+        margin: 0 auto;
+        color: #fff;
+        text-align: center;
+        line-height: 400px;
+    }
+</style>
+
+<body>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <div class="container"></div>
+    <button class="btn">提交</button>
+    <button class="btncancel">取消防抖</button>
+
+    <script>
+        let count = 0;
+        let btn = document.querySelector('.btn');
+        let container = document.querySelector('.container');
+        let btncancel = document.querySelector('.btncancel');
+        function doSomeThing(e) {
+            container.innerHTML = count++;
+            return '我是返回值';
+        }
+
+        function debounce(func, await, immediate) {
+            let timeout, result;
+            let ducounred = function () {
+                const context = this;
+                let argus = arguments;
+                clearTimeout(timeout)
+                if (immediate) {
+                    //立即执行
+                    setTimeout(() => {
+                        timeout = null;
+                    }, await)
+                    if (!timeout) result = func.apply(context, argus)
+
+                } else {
+                    timeout = setTimeout(() => {
+                        //改变执行函数的this指向，和event对象
+                        result = func.apply(context, argus)
+                    }, await)
+                }
+
+                return result;
+            }
+
+            //取消防抖事件
+            ducounred.cancel = function () {
+                clearTimeout(timeout)
+                timeout = null
+                
+            }
+            return ducounred
+        }
+        let doSome = debounce(doSomeThing, 5000);
+        let doSome1 = debounce1(doSomeThing, 5000);//不包含取消防抖
+        btn.onclick = doSome1
+        btncancel.onclick = () => {
+            doSome.cancel()
+        }
+
+
+
+
+
+        function debounce1(func, await, immediate) {
+            let timeout, result;
+            return function () {
+                const context = this;
+                let argus = arguments;
+                clearTimeout(timeout)
+                if (immediate) {
+                    //立即执行
+                    setTimeout(() => {
+                        timeout = null;
+                    }, await)
+                    if (!timeout) result = func.apply(context, argus)
+
+                } else {
+                    timeout = setTimeout(() => {
+                        //改变执行函数的this指向，和event对象
+                        result = func.apply(context, argus)
+                    }, await)
+                }
+
+                return result;
+            }
+
+           
+           
+        }
+
+       
+
+
+
+
+
+
+        //防抖：
+        // 事件响应函数(doSome)在一段时间后(300ms)才执行，如果在这段时间内再次调用，则重新计算执行时间，当规定的时间内执行
+        // 应用场景
+        // 1.scroll时间滚动出发
+        // 2，搜索框输入查询
+        // 3.表单验证
+        // 4.按钮提交事件，
+        // 5浏览器窗口缩放，resize
+
+
+
+
+    </script>
+</body>
+
+</html>
