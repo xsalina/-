@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ds</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+</head>
+<style>
+    .container {
+        width: 400px;
+        height: 400px;
+        background-color: black;
+        margin: 0 auto;
+        color: #fff;
+        text-align: center;
+        line-height: 400px;
+    }
+</style>
+
+<body>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <div class="container"></div>
+    <button class="btn">提交</button>
+
+    <script>
+        let count = 0;
+        let btn = document.querySelector('.btn');
+        let container = document.querySelector('.container');
+        function doSomeThing(e) {
+            container.innerHTML = count++;
+            return '我是返回值';
+        }
+        // //节流
+        //     原理：如果你持续触发事件，每隔一段时间，只执行一次
+        // 应用场景：
+        //     1.DOM元素的拖拽功能实现
+        //     2.射击类游戏
+        //     3.计算鼠标移动的距离
+        //     4.监听scroll滚动事件
+
+        // //第一次触发,最后不会被调用函数 leading：true training:false
+        // //时间戳完成的 不顾头，顾尾巴
+        // function throttle(func,waitTime) {
+        //     let oldTime = 0;
+        //     let context,args,newTime;
+        //     return function () {
+        //         context = this;
+        //         args = arguments
+        //         newTime = new Date().valueOf()
+        //         if(newTime - oldTime >waitTime){
+        //             func.apply(context,args)
+        //             oldTime = newTime
+        //         }
+
+        //     }
+        // }
+
+
+        //第一次不会触发,最后一次调用函数，会触发  leading：false training:true
+        //时间戳完成的 顾头，不顾尾巴
+        // function throttle(func,waitTime) {
+
+        //     let context,args,timeout;
+        //     return function () {
+        //         context = this;
+        //         args = arguments
+        //         if(!timeout){
+        //             timeout = setTimeout(()=>{
+        //                 timeout = null
+        //                 func.apply(context,args)
+        //             },waitTime)
+        //         }
+
+        //     }
+        // }
+
+        //第一次触发,最后一次调用函数，会触发  leading：true training:true
+        //时间戳完成的 顾头，顾尾巴
+        // function throttle(func, waitTime) {
+        //     let context, args, timeout, oldTime = 0;
+        //     let later = function () {
+        //         oldTime = new Date().valueOf()
+        //         timeout = null
+        //         func.apply(context, args)
+        //     }
+        //     return function () {
+        //         let newTime = new Date().valueOf()
+        //         context = this;
+        //         args = arguments
+        //         if (newTime - oldTime > waitTime) {
+        //             if (timeout) {
+        //                 clearTimeout(timeout)
+        //                 timeout = null
+        //             }
+        //             func.apply(context, args)
+        //             oldTime = newTime
+        //         }
+        //         if (!timeout) {
+        //             timeout = setTimeout(later, waitTime)
+        //         }
+
+        //     }
+        // }
+        //终极版本
+        function throttle(func, waitTime, parmters) {
+            const { leading, training } = parmters;
+            let context, args, timeout, oldTime = 0;
+           
+            let funcApplyAndtimeoutNull = function(obj){
+                const {funcapply,timeoutNull} = obj
+                if(funcapply) func.apply(context, args)
+                if(timeoutNull) timeout = null
+                
+            }
+            let later = function (boolean) {
+                timeout = setTimeout(() => {
+                    if (boolean) oldTime = new Date().valueOf()
+                    funcApplyAndtimeoutNull({funcapply:true,timeoutNull:true})
+                }, waitTime)
+
+            }
+            return function () {
+                let newTime = new Date().valueOf()
+                context = this;
+                args = arguments;
+                if (leading) {
+                    if (newTime - oldTime > waitTime) {
+                        if (timeout && training) {
+                            clearTimeout(timeout)
+                            funcApplyAndtimeoutNull({funcapply:false,timeoutNull:true})
+                           
+                        }
+                        funcApplyAndtimeoutNull({funcapply:true,timeoutNull:false})
+                        oldTime = newTime
+                    }
+                    if (!timeout && training) {
+                        later(true)
+                    }
+                } else {
+                    if (!timeout) {
+                        later()
+                    }
+                }
+
+
+
+            }
+        }
+
+
+        let doSome1 = throttle(doSomeThing, 2000, { leading: true, training: true });
+        btn.onclick = doSome1
+    </script>
+</body>
+
+</html>
