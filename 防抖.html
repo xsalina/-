@@ -48,7 +48,7 @@
             let ducounred = function () {
                 const context = this;
                 let argus = arguments;
-                clearTimeout(timeout)
+                if(timeout)  clearTimeout(timeout)
                 if (immediate) {
                     //立即执行
                     setTimeout(() => {
@@ -90,7 +90,7 @@
             return function () {
                 const context = this;
                 let argus = arguments;
-                clearTimeout(timeout)
+                if(timeout)  clearTimeout(timeout)
                 if (immediate) {
                     //立即执行
                     setTimeout(() => {
