@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" v-model='content'>
+    <h5 v-bind='content'></h5>
+    <hr>
+    <input type="text" v-model='title'>
+    <input type="text" v-model='title'>
+    <h4 v-bind='title'></h4>
+    <script>
+        function Iview(){
+            let proxy = new Proxy({},{
+                set(obj,property,value){
+                   const elements = document.querySelectorAll(`[v-model="${property}"]`);
+                   elements.forEach(item => item.value = value)
+
+                   const elementsBind = document.querySelectorAll(`[v-bind="${property}"]`);
+                   elementsBind.forEach(item => item.innerHTML = value)
+                },
+                get(obj,property){
+
+                }
+                
+            })
+            this.init = function(){
+                const elements = document.querySelectorAll("[v-model]");
+                elements.forEach(item => {
+                    item.addEventListener('keyup',function(){
+                        proxy[this.getAttribute("v-model")] = this.value
+                    })
+                })
+                    
+            }
+        }
+        new Iview().init()
+    </script>
+</body>
+</html>
