@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .error {
+        color:red;
+    }
+</style>
+
+<body>
+    <input type="text" validate rule='max:12,min:3'>
+    <input type="text" validate rule='max:3,isNumber'>
+
+    <script>
+        class Validate {
+            max(value, len) {
+                return value.length <= len
+            }
+            min(value, len) {
+                return value.length >= len
+            }
+            isNumber(value) {
+                return (!isNaN(value))
+                // return /^\d+$/.test(value)
+            }
+        }
+
+        // let validate = new Validate();
+
+
+        function ProxyFactory(target) {
+            return new Proxy(target, {
+                set(target, key, ele) {
+                    const validate = new Validate();
+                    const rules = ele.getAttribute('rule');
+                    const state = rules.split(',').every(rule => {
+                        console.log(444,rule)
+                        const info = rule.split(':');//[max,12]
+                        return validate[info[0]](ele.value, info[1])
+                    })
+                    ele.classList[state?'remove':'add']('error')
+                    return true
+                },
+                get(target, key) {
+                    return target[key]
+                },
+            })
+        }
+
+        const proxys = ProxyFactory(document.querySelectorAll("[validate]"))
+        proxys.forEach((item, i) => {
+            item.addEventListener('keyup', function () {
+                proxys[i] = this;
+            })
+        })
+        console.log(666, proxys)
+    </script>
+</body>
+
+</html>
