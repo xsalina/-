@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class User{
+            constructor(name,age){
+                this.name = name
+                this.age = age
+            }
+            static create(...argus){
+                return new this(...argus)
+            }
+        }
+        const xj = User.create('后盾人',18)
+        console.log(666,xj)
+    </script>
+</body>
+</html>

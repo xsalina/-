@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Hd(name){
+            this.name = name
+        }
+        Hd.prototype.show = function(){}
+
+        const HH = new Hd('后盾人')
+        console.log(1111,HH)
+        console.log(222,
+            JSON.stringify(
+                Object.getOwnPropertyDescriptor(Hd.prototype,'show',null,2)//{"writable":true,"enumerable":false,"configurable":true}
+            )
+        )
+
+        for (const key in HH) {
+            console.log(333,key)// name  show
+            if (HH.hasOwnProperty(key)) {
+                const element = HH[key];//name
+                console.log(444,element)
+                
+            }
+        }
+
+
+
+
+
+
+        //  class 声明的语法糖 这个对象的enumerable（可枚举性）为false =>用来控制所描述的属性，所以他的原型上面的方法是不可以被遍历的
+        class User{
+            constructor(name){
+                this.name = name
+            }
+            show(){}
+        }
+        const u = new User('向军')
+        console.dir(u)
+        console.log(
+            JSON.stringify(
+                Object.getOwnPropertyDescriptor(User.prototype,'show',null,2)//{"writable":true,"enumerable":false,"configurable":true}
+            )
+        )
+        for (const key in u) {
+            // if (object.hasOwnProperty(key)) {
+            //     const element = object[key];
+                
+            // }
+            console.log(11111,key)//name
+
+        }
+
+
+
+
+
+        
+    </script>
+</body>
+</html>

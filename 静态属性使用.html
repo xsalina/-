@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class Request{
+            host = 'www.baidu.com'//如果这样写的话实例可以改变这个地址
+        //    static host = 'https://www.houdunren.com'//这个是静态属性，可以给多个实例使用，但不可以改变它。
+        //     api(url){
+        //         return `${Request.host}/${url}`
+        //     }
+        }
+        
+        const r = new Request()
+        const b = new Request()
+        r.host = 'alert'
+        console.log(r)//Request {host: "alert"}
+        console.log(b)// {host: "www.baidu.com"}
+
+
+
+        //可以用作请求，多个实例使用同一个host，但不改变它
+        class Request1{
+           static host = 'https://www.houdunren.com'//这个是静态属性，可以给多个实例使用，但不可以改变它。 其实就是Request1.host = 'https://www.houdunren.com'
+            api(url){
+                return `${Request1.host}/${url}`
+            }
+        }
+        
+        const rr = new Request1()
+        console.log(rr.api("actril"))//https://www.houdunren.com/actril
+
+
+
+
+
+    </script>
+</body>
+</html>
