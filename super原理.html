@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class User{
+            show(){
+                console.log('user show')
+            }
+        }
+
+        class Admin extends User{
+            show(){
+                // super.show()//调用父级类的方法
+                console.log('admin show')
+            }
+        }
+        const hd = new Admin();
+        hd.show()
+
+
+
+
+
+
+        let xl = {
+            show(){console.log('xl.show')}
+        }
+
+        let xyp ={
+            __proto__:xl,
+            show(){
+                this.__proto__.show.call(this);//要改变this，不然调用方法时的用的是xl的this
+                console.log('xyp.show')
+            }
+        }
+        
+        xyp.show()
+
+
+
+    </script>
+</body>
+</html>
