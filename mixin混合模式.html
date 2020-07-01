@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const Tools = {
+            max(type){
+                // this.data取得就是Lesson的 get data方法，防蚊器
+                return this.data.sort((a,b) => b[type] - a[type])[0]
+            },
+            min(type){
+                return this.data.sort((a,b) => a[type] - b[type])[0]
+            }
+        }
+
+        const ArrMethods = {
+            totallyCount(type){
+                return this.data.reduce((cur,item) => cur + item[type],0)
+            }
+        }
+        class Lesson{
+            constructor(lessons){
+                this.lessons = lessons
+            }
+            get data(){
+                return this.lessons
+            }
+        }
+        //在Lesson原型链上添加Tools,ArrMethods这两个对象
+        Object.assign(Lesson.prototype,Tools,ArrMethods)
+
+        const source =[
+            {name:'张三',math:98,chinese:20,english:70},
+            {name:'李四',math:40,chinese:60,english:90},
+            {name:'王麻子',math:100,chinese:50,english:30},
+        ]
+        const l = new Lesson(source)
+        console.log(l.max('chinese'))//可以使用Tools上面的方法
+        console.log(l.totallyCount('chinese'))//可以使用ArrMethods上面的方法
+    </script>
+</body>
+</html>
