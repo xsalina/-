@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+   *{
+        margin:0;
+        padding:0;
+    }
+    .slide-box{
+        width:380px;
+        padding:10px;
+        margin:20px;
+        display: flex;
+        flex-direction: column;
+    }
+    .slide-box .title:nth-child(1) {
+        border-radius:10px 10px 0 0;
+    }
+    .slide-box .title{
+        height:40px;
+        padding:0 10px;
+        line-height:40px;
+        background-color:black;
+        color:#fff;
+
+    }
+    .slide-box .title-content{
+        height:250px;
+        padding:0 10px;
+        background-color:Orange;
+        color:black;
+        overflow:hidden;
+    }
+
+</style>
+<body>
+    
+    <div>
+        <div class='slide-box'>
+                <div class='title'>salina</div>
+                <div class='title-content'>title-content111</div>
+           
+            
+                <div class='title'>salina</div>
+                <div class='title-content'>title-content2222</div>
+
+                <div class='title'>salina</div>
+                <div class='title-content'>title-content3333</div>
+
+                <div class='title'>salina</div>
+                <div class='title-content'>title-content4444</div>
+
+           
+        </div>
+    </div>
+    <script>
+        // const slide = document.querySelector('.slide-box');
+        class Animation {
+            constructor(el){
+                this.el = el;
+                this.styleShow = true;
+                this.defaultHeight = this.height;
+                this.frequencyTime = 20;
+            }
+            hide(callback){
+                this.styleShow = false;
+               const reduceHeight = setInterval(()=>{
+                   if(this.height <=0){
+                       clearInterval(reduceHeight)
+                       callback && callback()
+                        return;
+                   };
+                   this.height = this.height - 1
+               },this.frequencyTime)
+               
+            }
+            show(callback){
+                this.styleShow = true;
+               const addHeight = setInterval(()=>{
+                   if(this.height >= this.defaultHeight){
+                       clearInterval(addHeight)
+                       callback && callback()
+                        return;
+                   };
+                   this.height = this.height + 1
+               },this.frequencyTime)
+            }
+            get height(){
+                return window.getComputedStyle(this.el).height.slice(0,-2)* 1;
+            }
+            set height(height){
+                this.el.style.height = height + 'px';
+            }
+
+        }
+
+
+
+
+
+
+        class Slide{
+            constructor(el,link,panel){
+                this.el = document.querySelector(el)
+                this.links = document.querySelectorAll(link)
+                this.panels = [...document.querySelectorAll(panel)].map(item => new Panel(item))            
+                                        
+                this.bind()
+            }
+            bind(){
+                this.links.forEach((item,i) => {
+                    item.addEventListener('click',()=>{
+                       this.action(i)
+                    })
+                })
+            }
+            action(i){
+                Panel.hideAll(Panel.filter(this.panels,i),()=>this.panels[i].show())
+                
+            }
+        }
+        
+       
+
+       
+
+
+        class Panel extends Animation{
+           static num = 0;
+           static hideAll(items,callback){
+               if(Panel.num > 0)return;
+               items.forEach((item,index) => {
+                Panel.num += items.length
+                item.hide(()=> {
+                    if(index == items.length - 1){//最后一个
+                        Panel.num = 0
+                        callback && callback()
+                    }
+                })
+               })
+               
+           }
+           static filter(items,i){
+               return items.filter((item,index) => index !== i)
+           }
+       }
+
+
+
+       const hh = new Slide('.slide-box','.title','.title-content')
+    </script>
+</body>
+</html>
