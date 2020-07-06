@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // AMD require.js CMD sea.js
+        // COMMONJS node.js
+        // UMD
+        let module = (function (){
+            const modulesList={};
+            function define(name,modules,action){
+                modules.map((m,i) => modules[i] = modulesList[m])
+            //    [{
+            //     tool:{
+            //             first(arr){
+            //             return arr[0]
+            //         },
+            //         max(arr,key){
+            //             return arr.sort((a,b)=>b[key]-a[key])[0]
+            //         },
+                    xyp:
+            //    }]
+            console.log(4444444,modules)
+                
+                modulesList[name] = action.apply(null,modules)
+                // modulesList{
+                //     tool:{
+                            
+                //         first(arr){
+                //            return arr[0]
+                //         },
+                //         max(arr,key){
+                //             return arr.sort((a,b)=>b[key]-a[key])[0]
+                //         },
+                //     },
+                //     add:{
+                //         balal(arr){
+                //             return arr[2]
+                //         }
+                //     }
+                // }
+                
+                console.log(modulesList)
+            }
+            return {define}
+        })()
+        module.define('add',[],function(){
+            return {
+                balala(arr){
+                    return arr[2]
+                }
+            }
+        })
+
+        module.define('tool',[],function(){
+            return {
+                first(arr){
+                    return arr[0]
+                },
+                max(arr,key){
+                    return arr.sort((a,b)=>b[key]-a[key])[0]
+                }
+            }
+        })
+        module.define('xyp',['tool','add'],function(datata,l){
+            console.log(777,l)//balala(arr){return arr[2]}
+            // [action.apply(null,modules)]
+            const data = [
+                {name:'小花',age:18},
+                {name:'小红',age:15},
+                {name:'小黑',age:20}
+            ]
+            console.log(datata.max(data,'age'))
+            return 7
+        })
+    </script>
+</body>
+</html>
