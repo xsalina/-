@@ -119,7 +119,9 @@
                 })
             }
             action(i){
-                Panel.hideAll(Panel.filter(this.panels,i),()=>this.panels[i].show())
+                Panel.hideAll(Panel.filter(this.panels,i),()=>{
+                    this.panels[i].show()
+                })
                 
             }
         }
@@ -130,20 +132,17 @@
 
 
         class Panel extends Animation{
-           static num = 0;
-           static hideAll(items,callback){
-               if(Panel.num > 0)return;
-               items.forEach((item,index) => {
-                Panel.num += items.length
-                item.hide(()=> {
-                    if(index == items.length - 1){//最后一个
-                        Panel.num = 0
-                        callback && callback()
-                    }
-                })
-               })
-               
-           }
+            static num = 0;
+      static hideAll(items, callback) {
+        if (Panel.num > 0) return;
+        items.forEach(item => {
+          Panel.num++;
+          item.hide(() => {
+            Panel.num--;
+          });
+        });
+        callback && callback();
+      }
            static filter(items,i){
                return items.filter((item,index) => index !== i)
            }
